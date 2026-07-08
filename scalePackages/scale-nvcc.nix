@@ -32,12 +32,6 @@ stdenvNoCC.mkDerivation {
   propagatedBuildInputs = [
     cudaPackages.setupCudaHook
   ];
-  propagatedBuildOutputs = [
-    "bin"
-    "include"
-    "lib"
-    "stubs"
-  ];
 
   installPhase = ''
     runHook preInstall

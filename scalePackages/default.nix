@@ -5,5 +5,5 @@ lib.makeScope newScope (self: {
   scale-llvm = callPackage ./scale-llvm.nix self;
   scale-nvcc = callPackage ./scale-nvcc.nix self;
   scale-runtime = callPackage ./scale-runtime.nix self;
-  scale-cccl = callPackage ./scale-cccl.nix self;
+  cccl = callPackage ./cccl.nix self;
 })

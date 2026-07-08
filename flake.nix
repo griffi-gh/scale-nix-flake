@@ -21,7 +21,7 @@
       cuda_compat = scalePackages.scale-runtime; # HACK
       libcufft = scalePackages.scale-runtime;
       libcublas = scalePackages.scale-runtime;
-      cuda_cccl = scalePackages.scale-cccl;
+      cuda_cccl = scalePackages.cccl;
       # autoAddCudaCompatRunpath = ... enableHook = false;
     };
 

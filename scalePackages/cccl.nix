@@ -18,19 +18,6 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
-    cudaPackages.markForCudatoolkitRootHook
-  ];
-  propagatedBuildInputs = [
-    cudaPackages.setupCudaHook
-  ];
-  propagatedBuildOutputs = [
-    "bin"
-    "include"
-    "lib"
-    "stubs"
-  ];
-
   installPhase = ''
     runHook preInstall
 
@@ -42,7 +29,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "Building blocks that make it easier to write safe and efficient CUDA C++ code (SCALE)";
+    description = "Building blocks that make it easier to write safe and efficient CUDA C++ code";
     homepage = "https://scale-lang.com/";
     license = lib.licenses.unfree;
   };
