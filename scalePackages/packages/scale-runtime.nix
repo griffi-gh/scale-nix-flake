@@ -2,13 +2,13 @@
   lib,
   stdenvNoCC,
   cudaPackages,
-  scale-unwrapped-nightly,
-  scale-unwrapped ? scale-unwrapped-nightly,
+  scale-unwrapped,
+  scaleVersion,
   ...
 }:
 stdenvNoCC.mkDerivation {
   pname = "scale-runtime";
-  inherit (scale-unwrapped) version;
+  version = scaleVersion;
 
   __structuredAttrs = true;
   strictDeps = true;

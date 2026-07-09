@@ -1,13 +1,13 @@
 {
   lib,
   stdenvNoCC,
-  scale-unwrapped-nightly,
-  scale-unwrapped ? scale-unwrapped-nightly,
+  scale-unwrapped,
+  scaleVersion,
   ...
 }:
 stdenvNoCC.mkDerivation {
   pname = "scale-llvm-unwrapped";
-  inherit (scale-unwrapped) version;
+  version = scaleVersion;
 
   dontUnpack = true;
   dontBuild = true;

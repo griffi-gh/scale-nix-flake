@@ -1,30 +1,20 @@
 {
   lib,
   stdenv,
-  requireFile,
   autoPatchelfHook,
   zlib,
   zstd,
   numactl,
   elfutils,
   libdrm,
-  gcc,
+  scaleVersion,
+  scaleSrc,
   ...
 }:
-let
-  commitHash = "49b59d463dd9a2f476b7144c3bf751c011309531";
-  commitDate = "2026.07.03";
-  fileName = "scale-unstable-${commitDate}-Linux.tar.xz";
-in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "scale-unwrapped-nightly";
-  version = "0-unstable-${commitDate}-${commitHash}";
-
-  src = requireFile {
-    name = fileName;
-    hash = "sha256-Fw7stE4e7BlUqftU6d0gzcTY/nvSiG+RT1u5truWZ7o=";
-    url = "https://dev-artifacts.spectralcompute.com/external/nightlies/${commitHash}/linux/${fileName}";
-  };
+  pname = "scale-unwrapped";
+  version = scaleVersion;
+  src = scaleSrc;
 
   nativeBuildInputs = [
     autoPatchelfHook

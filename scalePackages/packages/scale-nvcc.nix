@@ -6,10 +6,9 @@
   makeWrapper,
   scale-llvm,
   scale-runtime,
-  scale-unwrapped-nightly,
-  scale-unwrapped ? scale-unwrapped-nightly,
   target ? "gfx1103",
   nv_target ? "86",
+  scaleVersion,
   ...
 }:
 let
@@ -39,7 +38,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "scale-nvcc";
-  inherit (scale-unwrapped) version;
+  version = scaleVersion;
 
   __structuredAttrs = true;
   strictDeps = true;

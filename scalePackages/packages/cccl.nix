@@ -1,13 +1,13 @@
 {
   lib,
   stdenvNoCC,
-  scale-unwrapped-nightly,
-  scale-unwrapped ? scale-unwrapped-nightly,
+  scale-unwrapped,
+  scaleVersion,
   ...
 }:
 stdenvNoCC.mkDerivation {
   pname = "cccl";
-  inherit (scale-unwrapped) version;
+  version = scaleVersion;
 
   __structuredAttrs = true;
   strictDeps = true;
