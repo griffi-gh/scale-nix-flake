@@ -8,13 +8,15 @@
     latest =
       let
         version = "1.7.1";
+        fileName = "scale-${version}-amd64.tar.xz";
       in
       mkScaleScope {
         scaleVersion = version;
         scaleSrc = fetchurl {
+          name = fileName;
           inherit version;
-          url = "https://pkgs.scale-lang.com/tar/scale-${version}-amd64.tar.xz";
-          hash = "";
+          url = "https://pkgs.scale-lang.com/tar/${fileName}";
+          hash = "sha256-Bgo2J3JfYABaaeIJszLXhH/XwD65UYvnBV3cADxzor4=";
         };
       };
 
