@@ -21,7 +21,8 @@
       nameSuffix = name: if name == nameDefault then "" else "_${name}";
 
       mkScaleScope = pkgs.callPackage ./scalePackages/mkScaleScope.nix { };
-      scaleVersionsAll = pkgs.callPackage ./scalePackages/scaleVersions.nix { inherit mkScaleScope; };
+      scaleVersionsAll =
+        (pkgs.callPackage ./scalePackages/scaleVersions.nix { inherit mkScaleScope; }).scaleVersions;
 
       scalePackagesAll =
         (lib.mapAttrs' (
