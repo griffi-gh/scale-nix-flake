@@ -3,21 +3,43 @@
   stdenvNoCC,
   cudaPackages,
   writeText,
+  makeWrapper,
   scale-llvm,
   scale-runtime,
+  scale-unwrapped-nightly,
+  scale-unwrapped ? scale-unwrapped-nightly,
   target ? "gfx1103",
   nv_target ? "86",
   ...
 }:
 let
+  cudaVersionString = "12.9";
+
   ccmap = writeText "ccmap.conf" ''
     ${target} ${nv_target}
     ${target}
   '';
+
+  setupScaleEnvHook = writeText "setup-scale-hook.sh" ''
+    setupScaleEnv() {
+      export CUDAARCHS="${nv_target}"
+      export CMAKE_CUDA_ARCHITECTURES="${nv_target}"
+      cmakeFlagsArray+=(
+        "-DCUDA_VERSION=${cudaVersionString}"
+        "-DCUDA_VERSION_STRING=${cudaVersionString}"
+      )
+    }
+    preConfigureHooks+=(setupScaleEnv)
+  '';
+
+  nvccFlags = lib.escapeShellArgs [
+    "--cuda-ccmap=${ccmap}"
+    "--cuda-path=${scale-runtime}"
+  ];
 in
 stdenvNoCC.mkDerivation {
   pname = "scale-nvcc";
-  version = "0-unstable";
+  inherit (scale-unwrapped) version;
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -28,25 +50,36 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     cudaPackages.markForCudatoolkitRootHook
+    makeWrapper
   ];
   propagatedBuildInputs = [
     cudaPackages.setupCudaHook
+    setupScaleEnvHook
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{lib,bin,libexec,share/scale,nvvm/libdevice}
-    ln -s ${scale-llvm}/bin/clang $out/bin/nvcc
-    ln -s ${scale-llvm}/bin/clang $out/bin/clang
-    ln -s ${scale-llvm}/bin/clang $out/bin/clang++
+    mkdir -p $out/{bin,share/scale,nvvm/libdevice}
+
+    cp ${scale-llvm}/bin/clang $out/bin/nvcc
+    substituteInPlace $out/bin/nvcc \
+      --replace-fail "${scale-llvm.cc}/bin/clang" "${scale-llvm.cc}/bin/nvcc" \
+      --replace-warn "isCxx=0" "isCxx=1"
+
+    wrapProgram $out/bin/nvcc \
+      --add-flags "${nvccFlags}"
+
+    ln -s ${ccmap} $out/share/scale/ccmap.conf
     ln -s ${scale-llvm.cc}/bin/amdgpu-arch $out/bin/amdgpu-arch
     ln -s ${scale-llvm.cc}/bin/lld $out/bin/device-linker-gnu
     ln -s ${scale-llvm.cc}/bin/lld $out/bin/lld
-    ln -s ${scale-llvm.cc}/bin/lld $out/bin/ld.lld
-    cp -Rs ${scale-llvm.cc}/lib/* $out/lib
-    cp -Rs ${scale-llvm.cc}/libexec/* $out/libexec
-    ln -s ${ccmap} $out/share/scale/ccmap.conf
+    ln -s ${scale-llvm.cc}/bin/ld.lld $out/bin/ld.lld
+    ln -s ${scale-llvm}/bin/clang $out/bin/clang
+    ln -s ${scale-llvm}/bin/clang++ $out/bin/clang++
+
+    ln -s ${scale-runtime}/include $out/include
+    ln -s ${scale-runtime}/lib $out/lib
 
     runHook postInstall
   '';

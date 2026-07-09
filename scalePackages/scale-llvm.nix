@@ -1,10 +1,9 @@
 {
-  lib,
-  llvmPackages,
-  gcc,
+  cudaPackages,
   bintools,
   wrapCCWith,
   scale-llvm-unwrapped,
+  scale-runtime,
   ...
 }:
 wrapCCWith {
@@ -16,5 +15,14 @@ wrapCCWith {
 
   isClang = true;
   useCcForLibs = true;
-  gccForLibs = gcc.cc;
+  gccForLibs = cudaPackages.backendStdenv.cc.cc;
+
+  extraBuildCommands = ''
+    # ensure that scale-runtime headers and redscale_impl/wrappers are always searched before cstdlib
+    flags="$(< $out/nix-support/libcxx-cxxflags)"
+    echo "-isystem ${scale-runtime}/include -isystem ${scale-runtime}/include/redscale_impl/wrappers $flags -include cstdlib" > $out/nix-support/libcxx-cxxflags
+
+    # kill hardening
+    > $out/nix-support/add-hardening.sh
+  '';
 }

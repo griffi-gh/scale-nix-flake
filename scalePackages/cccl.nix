@@ -1,13 +1,12 @@
 {
   lib,
   stdenvNoCC,
-  cudaPackages,
   scale-unwrapped-nightly,
   scale-unwrapped ? scale-unwrapped-nightly,
   ...
 }:
 stdenvNoCC.mkDerivation {
-  pname = "scale-cccl";
+  pname = "cccl";
   inherit (scale-unwrapped) version;
 
   __structuredAttrs = true;
@@ -30,7 +29,6 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Building blocks that make it easier to write safe and efficient CUDA C++ code";
-    homepage = "https://scale-lang.com/";
     license = lib.licenses.unfree;
   };
 }
