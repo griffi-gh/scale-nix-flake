@@ -35,18 +35,16 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/lib
-    cp -Rs ${scale-unwrapped}/targets/amdgpu/lib/* $out/lib
-    cp -Rs ${scale-unwrapped}/include $out/include
+    ln -s $out/lib $out/lib64
+    cp -Rs --no-preserve=mode ${scale-unwrapped}/targets/amdgpu/lib/* $out/lib
+    cp -Rs --no-preserve=mode ${scale-unwrapped}/include $out/include
 
     # https://github.com/spectral-compute/scale-validation/issues/62
-    chmod u+w $out/include/redscale_impl
     rm $out/include/redscale_impl/builtins.h
     sed -e 's/__host__ __DEVICE float rsqrt(float);/\/\/ __host__ __DEVICE float rsqrt(float);/' \
         -e 's/__host__ __DEVICE double rsqrt(double);/\/\/ __host__ __DEVICE double rsqrt(double);/' \
         -e 's/__host__ __DEVICE float rsqrtf(float);/\/\/ __host__ __DEVICE float rsqrtf(float);/' \
         ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
-
-    ln -s $out/lib $out/lib64
 
     runHook postInstall
   '';
