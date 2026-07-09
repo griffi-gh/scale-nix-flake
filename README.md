@@ -2,15 +2,16 @@
 
 Nix flake for the [SCALE](https://scale-lang.com/) CUDA-compatible compiler toolkit.
 
-Can be used as a drop-in overlay for compiling any existing \
+Can be used as a drop-in overlay for compiling any existing
 packages that depend on `cudaPackages`!
 
 ## Outputs
 
 * `legacyPackages.x86_64-linux`:
-  * `scalePackages` / `scalePackages_nightly`: Standalone SCALE toolchain (`scale-nvcc`, `scale-runtime`).
-  * `nixpkgsScale` / `nixpkgsScale_nightly`: Full Nixpkgs instances with \
-    `cudaPackages` globally replaced by SCALE.
+  * `scalePackages` / `scalePackages_nightly`: Standalone SCALE toolchain
+    (`scale-nvcc`, `scale-runtime`, etc...).
+  * `nixpkgsScale` / `nixpkgsScale_nightly`: Full Nixpkgs instances with
+    `cudaPackages` globally replaced by their respective SCALE packages.
 * `overlays`:
   * `default`: Adds the SCALE packages to `pkgs`.
   * `cudaPackages` / `cudaPackages_nightly`: Overrides `cudaPackages` to use SCALE.
