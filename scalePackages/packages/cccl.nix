@@ -6,7 +6,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "cccl";
-  version = "0-unstable-unsupported";
+  version = "0-unstable";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,8 +20,8 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    cp -Rs ${scale-unwrapped}/cccl/* $out
-    ln -s $out/include/cccl $out/include
+    cp -Rs --no-preserve=mode ${scale-unwrapped}/cccl/* $out
+    ln -s $out/include $out/include/cccl
 
     runHook postInstall
   '';

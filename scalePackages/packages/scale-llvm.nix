@@ -1,7 +1,6 @@
 {
-  cudaPackages,
-  bintools,
   wrapCCWith,
+  cudaPackages,
   scale-llvm-unwrapped,
   ...
 }:
@@ -9,8 +8,7 @@ wrapCCWith {
   name = "scale-llvm";
 
   cc = scale-llvm-unwrapped;
-  inherit bintools;
-  inherit (bintools) libc;
+  inherit (cudaPackages.backendStdenv.cc) bintools libc;
 
   isClang = true;
   useCcForLibs = true;
