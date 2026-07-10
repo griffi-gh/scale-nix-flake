@@ -49,7 +49,7 @@
             cudaPackages = cudaPackagesFor scaleScope;
           in
           {
-            scalePackages = scaleScope;
+            # TODO overlays for other CUDA versions (e.g. cudaPackages_13 etc)
             cudaPackages = prev.cudaPackages.overrideScope (final: prev: cudaPackages);
           }
         );
@@ -64,6 +64,7 @@
           import nixpkgs {
             inherit (pkgs) system config;
             overlays = [
+              overlayScalePackages
               (overlayCudaPackagesFor scalePackages)
             ];
           }

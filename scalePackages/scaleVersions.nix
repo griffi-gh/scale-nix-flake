@@ -25,9 +25,10 @@
         commitHash = "49b59d463dd9a2f476b7144c3bf751c011309531";
         commitDate = "2026.07.03";
         fileName = "scale-unstable-${commitDate}-Linux.tar.xz";
+        version = "0-unstable-${commitDate}";
       in
       mkScaleScope {
-        scaleVersion = "0-unstable-${commitDate}";
+        scaleVersion = version;
         scaleSrc = requireFile {
           name = fileName;
           hash = "sha256-Fw7stE4e7BlUqftU6d0gzcTY/nvSiG+RT1u5truWZ7o=";

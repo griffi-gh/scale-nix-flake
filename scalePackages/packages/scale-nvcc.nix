@@ -12,7 +12,7 @@
   ...
 }:
 let
-  cudaVersionString = "12.9";
+  inherit (cudaPackages) cudaMajorMinorVersion;
 
   ccmap = writeText "ccmap.conf" ''
     ${target} ${nv_target}
@@ -24,8 +24,10 @@ let
       export CUDAARCHS="${nv_target}"
       export CMAKE_CUDA_ARCHITECTURES="${nv_target}"
       cmakeFlagsArray+=(
-        "-DCUDA_VERSION=${cudaVersionString}"
-        "-DCUDA_VERSION_STRING=${cudaVersionString}"
+        "-DCUDAARCHS=${nv_target}"
+        "-DCMAKE_CUDA_ARCHITECTURES=${nv_target}"
+        "-DCUDA_VERSION=${cudaMajorMinorVersion}"
+        "-DCUDA_VERSION_STRING=${cudaMajorMinorVersion}"
       )
     }
     preConfigureHooks+=(setupScaleEnv)

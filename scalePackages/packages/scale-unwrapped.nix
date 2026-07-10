@@ -14,6 +14,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "scale-unwrapped";
   version = scaleVersion;
+
   src = scaleSrc;
 
   nativeBuildInputs = [

@@ -10,10 +10,10 @@ stdenvNoCC.mkDerivation {
   pname = "scale-runtime";
   version = scaleVersion;
 
+  outputs = [ "out" ];
+
   __structuredAttrs = true;
   strictDeps = true;
-
-  outputs = [ "out" ];
 
   dontUnpack = true;
   dontBuild = true;
@@ -23,12 +23,6 @@ stdenvNoCC.mkDerivation {
   ];
   propagatedBuildInputs = [
     cudaPackages.setupCudaHook
-  ];
-  propagatedBuildOutputs = [
-    "bin"
-    "include"
-    "lib"
-    "stubs"
   ];
 
   installPhase = ''

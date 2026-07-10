@@ -20,6 +20,6 @@ scalePackages currently includes:
 
 * `scale-unwrapped` - The raw patched SCALE tarball tree
 * `scale-runtime` - SCALE CUDA runtime libraries and includes
-* `scale-llvm` - SCALE LLVM compiler binaries
-* `scale-llvm-unwrapped` - Scale LLVM compiler wrapped with nixpkg's `wrapCC`
+* `scale-llvm-unwrapped` - SCALE LLVM compiler binaries (unwrapped)
+* `scale-llvm` - Scale LLVM compiler wrapped with nixpkg's `wrapCC`
 * `scale-nvcc` - The main SCALE NVCC compiler package

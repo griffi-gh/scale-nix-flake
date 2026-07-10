@@ -4,6 +4,7 @@
   wrapCCWith,
   scale-llvm-unwrapped,
   scale-runtime,
+  scaleVersion,
   ...
 }:
 wrapCCWith {
@@ -17,12 +18,13 @@ wrapCCWith {
   useCcForLibs = true;
   gccForLibs = cudaPackages.backendStdenv.cc.cc;
 
-  extraBuildCommands = ''
-    # ensure that scale-runtime headers and redscale_impl/wrappers are always searched before cstdlib
-    flags="$(< $out/nix-support/libcxx-cxxflags)"
-    echo "-isystem ${scale-runtime}/include -isystem ${scale-runtime}/include/redscale_impl/wrappers $flags -include cstdlib" > $out/nix-support/libcxx-cxxflags
+  includeFortifyHeaders = false;
 
+  extraBuildCommands = ''
     # kill hardening
     > $out/nix-support/add-hardening.sh
+
+    # emulate leaky cstdlib header from CUDA
+    echo "-include cstdlib" >> $out/nix-support/libcxx-cxxflags
   '';
 }
