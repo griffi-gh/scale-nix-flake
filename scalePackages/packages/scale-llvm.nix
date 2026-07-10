@@ -3,8 +3,6 @@
   bintools,
   wrapCCWith,
   scale-llvm-unwrapped,
-  scale-runtime,
-  scaleVersion,
   ...
 }:
 wrapCCWith {

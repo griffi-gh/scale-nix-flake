@@ -9,6 +9,7 @@
   target ? "gfx1103",
   nv_target ? "86",
   scaleVersion,
+  scaleLicense,
   ...
 }:
 let
@@ -89,6 +90,10 @@ stdenvNoCC.mkDerivation {
     description = "CUDA compiler driver (SCALE)";
     homepage = "https://scale-lang.com/";
     mainProgram = "nvcc";
-    license = lib.licenses.unfree;
+    license = scaleLicense;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode
+      fromSource
+    ];
   };
 }

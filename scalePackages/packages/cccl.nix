@@ -2,12 +2,11 @@
   lib,
   stdenvNoCC,
   scale-unwrapped,
-  scaleVersion,
   ...
 }:
 stdenvNoCC.mkDerivation {
   pname = "cccl";
-  version = scaleVersion;
+  version = "0-unstable-unsupported";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -29,6 +28,9 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Building blocks that make it easier to write safe and efficient CUDA C++ code";
-    license = lib.licenses.unfree;
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+    ];
   };
 }

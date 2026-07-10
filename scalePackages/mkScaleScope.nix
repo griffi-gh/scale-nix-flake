@@ -7,6 +7,7 @@
 meta@{
   scaleVersion,
   scaleSrc,
+  scaleLicense,
 }:
 lib.makeScope newScope (
   self:

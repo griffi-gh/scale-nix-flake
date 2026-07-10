@@ -3,6 +3,7 @@
   stdenvNoCC,
   scale-unwrapped,
   scaleVersion,
+  scaleLicense,
   ...
 }:
 stdenvNoCC.mkDerivation {
@@ -20,6 +21,10 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "CUDA compiler driver (SCALE)";
     homepage = "https://scale-lang.com/";
-    license = lib.licenses.unfree;
+    license = scaleLicense;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode
+      fromSource
+    ];
   };
 }

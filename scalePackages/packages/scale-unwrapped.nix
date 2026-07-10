@@ -9,6 +9,7 @@
   libdrm,
   scaleVersion,
   scaleSrc,
+  scaleLicense,
   ...
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "CUDA-compatible GPU programming toolkit (nightly)";
     homepage = "https://scale-lang.com/";
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = scaleLicense;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode
+      binaryBytecode
+      fromSource
+    ];
   };
 })

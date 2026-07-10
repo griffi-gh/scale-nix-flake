@@ -18,6 +18,7 @@
           url = "https://pkgs.scale-lang.com/tar/${fileName}";
           hash = "sha256-Bgo2J3JfYABaaeIJszLXhH/XwD65UYvnBV3cADxzor4=";
         };
+        scaleLicense = import ./scaleFreeLicense.nix;
       };
 
     nightly =
@@ -34,6 +35,7 @@
           hash = "sha256-Fw7stE4e7BlUqftU6d0gzcTY/nvSiG+RT1u5truWZ7o=";
           url = "https://dev-artifacts.spectralcompute.com/external/nightlies/${commitHash}/linux/${fileName}";
         };
+        scaleLicense = import ./scaleFreeLicense.nix;
       };
   };
 }
