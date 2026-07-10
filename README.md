@@ -19,6 +19,7 @@ packages that depend on `cudaPackages`!
 
 scalePackages currently includes:
 
+* `cccl` - version of CCCL shipped with the SCALE tarball
 * `scale-unwrapped` - The raw patched SCALE tarball tree
 * `scale-runtime` - SCALE CUDA runtime libraries and includes
 * `scale-llvm-unwrapped` - SCALE LLVM compiler binaries (unwrapped)
