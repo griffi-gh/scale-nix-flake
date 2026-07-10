@@ -32,5 +32,6 @@ stdenvNoCC.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [
       fromSource
     ];
+    platforms = lib.platforms.all;
   };
 }

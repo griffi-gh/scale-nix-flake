@@ -53,5 +53,6 @@ stdenvNoCC.mkDerivation {
       binaryBytecode
       fromSource
     ];
+    platforms = [ "x86_64-linux" ];
   };
 }
