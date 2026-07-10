@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "CUDA-compatible GPU programming toolkit (nightly)";
+    description = "CUDA-compatible GPU programming toolkit";
     homepage = "https://scale-lang.com/";
     inherit (_scale) license;
     sourceProvenance = with lib.sourceTypes; [
