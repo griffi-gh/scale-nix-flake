@@ -8,8 +8,7 @@
   scale-runtime,
   target ? "gfx1103",
   nv_target ? "86",
-  scaleVersion,
-  scaleLicense,
+  _scale,
   ...
 }:
 let
@@ -41,7 +40,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "scale-nvcc";
-  version = scaleVersion;
+  inherit (_scale) version;
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -90,7 +89,7 @@ stdenvNoCC.mkDerivation {
     description = "CUDA compiler driver (SCALE)";
     homepage = "https://scale-lang.com/";
     mainProgram = "nvcc";
-    license = scaleLicense;
+    inherit (_scale) license;
     sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode
       fromSource

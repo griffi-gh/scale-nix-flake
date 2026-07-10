@@ -3,13 +3,12 @@
   stdenvNoCC,
   cudaPackages,
   scale-unwrapped,
-  scaleVersion,
-  scaleLicense,
+  _scale,
   ...
 }:
 stdenvNoCC.mkDerivation {
   pname = "scale-runtime";
-  version = scaleVersion;
+  inherit (_scale) version;
 
   outputs = [ "out" ];
 
@@ -47,7 +46,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "CUDA Runtime (SCALE)";
     homepage = "https://scale-lang.com/";
-    license = scaleLicense;
+    inherit (_scale) license;
     sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode
       binaryBytecode

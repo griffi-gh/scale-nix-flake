@@ -7,16 +7,13 @@
   numactl,
   elfutils,
   libdrm,
-  scaleVersion,
-  scaleSrc,
-  scaleLicense,
+  _scale,
   ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "scale-unwrapped";
-  version = scaleVersion;
 
-  src = scaleSrc;
+  inherit (_scale) version src;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -49,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "CUDA-compatible GPU programming toolkit (nightly)";
     homepage = "https://scale-lang.com/";
-    license = scaleLicense;
+    inherit (_scale) license;
     sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode
       binaryBytecode

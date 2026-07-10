@@ -4,15 +4,17 @@
   callPackage,
   ...
 }:
-meta@{
-  scaleVersion,
-  scaleSrc,
-  scaleLicense,
+_scale@{
+  version,
+  src,
+  license,
 }:
 lib.makeScope newScope (
   self:
   let
-    scope = self // meta;
+    scope = self // {
+      inherit _scale;
+    };
   in
   {
     scale-unwrapped = callPackage ./packages/scale-unwrapped.nix scope;

@@ -2,13 +2,12 @@
   lib,
   stdenvNoCC,
   scale-unwrapped,
-  scaleVersion,
-  scaleLicense,
+  _scale,
   ...
 }:
 stdenvNoCC.mkDerivation {
   pname = "scale-llvm-unwrapped";
-  version = scaleVersion;
+  inherit (_scale) version;
 
   dontUnpack = true;
   dontBuild = true;
@@ -21,7 +20,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "CUDA compiler driver (SCALE)";
     homepage = "https://scale-lang.com/";
-    license = scaleLicense;
+    inherit (_scale) license;
     sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode
       fromSource
