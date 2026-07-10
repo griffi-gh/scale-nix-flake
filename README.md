@@ -11,7 +11,8 @@ packages that depend on `cudaPackages`!
   * `scalePackages` / `scalePackages_nightly`: Standalone SCALE toolchain
     (`scale-nvcc`, `scale-runtime`, etc...).
   * `nixpkgsScale` / `nixpkgsScale_nightly`: Full Nixpkgs instances with
-    `cudaPackages` globally replaced by their respective SCALE packages.
+    `cudaPackages` globally replaced by their respective SCALE packages.\
+    (use `overlays.cudaPackages` overlays over this whenever possible)
 * `overlays`:
   * `default`: Adds the SCALE packages to `pkgs`.
   * `cudaPackages` / `cudaPackages_nightly`: Overrides `cudaPackages` to use SCALE.
