@@ -89,7 +89,13 @@
           ) scaleVersionsAll;
         in
         {
+
           legacyPackages = scalePackagesAll // nixpkgsScaleAll;
+
+          overlays = {
+            default = overlayScalePackages;
+          }
+          // cudaOverlaysAll;
         };
     };
 }
