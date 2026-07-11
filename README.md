@@ -7,23 +7,21 @@ packages that depend on `cudaPackages`!
 
 ## Outputs
 
-Packages:
+Packages (`legacyPackages`):
 
-- `legacyPackages.x86_64-linux`:
-  - `scalePackages`, `scalePackages_nightly`: Standalone SCALE toolchain.
-    - `cccl` - version of CCCL shipped with the SCALE tarball
-    - `scale-unwrapped` - The raw patched SCALE tarball tree
-    - `scale-runtime` - SCALE CUDA runtime libraries and includes
-    - `scale-llvm-unwrapped` - SCALE LLVM compiler binaries (unwrapped)
-    - `scale-llvm` - Scale LLVM compiler wrapped with nixpkg's `wrapCC`
-    - `scale-nvcc` - The main SCALE NVCC compiler package
+- `scalePackages`, `scalePackages_nightly`: Standalone SCALE toolchain.
+  - `cccl` - version of CCCL shipped with the SCALE tarball
+  - `scale-unwrapped` - The raw patched SCALE tarball tree
+  - `scale-runtime` - SCALE CUDA runtime libraries and includes
+  - `scale-llvm-unwrapped` - SCALE LLVM compiler binaries (unwrapped)
+  - `scale-llvm` - Scale LLVM compiler wrapped with nixpkg's `wrapCC`
+  - `scale-nvcc` - The main SCALE NVCC compiler package
+- `nixpkgsScale`, `nixpkgsScale_nightly`: Full Nixpkgs instances with
+  `cudaPackages` globally replaced by their respective SCALE packages.
+  - This is soft-deprecated/only used for development purposes:
+    use `overlays.cudaPackages` overlays over this whenever possible)
 
-  - `nixpkgsScale`, `nixpkgsScale_nightly`: Full Nixpkgs instances with
-    `cudaPackages` globally replaced by their respective SCALE packages.
-    - This is soft-deprecated/only used for development purposes:
-      use `overlays.cudaPackages` overlays over this whenever possible)
-
-Overlays:
+Overlays (`overlays`):
 
 - `overlays`:
   - `default`: Adds the SCALE packages to `pkgs`.
