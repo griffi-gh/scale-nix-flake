@@ -10,8 +10,7 @@ packages that depend on `cudaPackages`!
 Packages:
 
 - `legacyPackages.x86_64-linux`:
-  - `scalePackages`, `scalePackages_nightly`: Standalone SCALE toolchain
-    (`scale-nvcc`, `scale-runtime`, etc...).
+  - `scalePackages`, `scalePackages_nightly`: Standalone SCALE toolchain.
     - `cccl` - version of CCCL shipped with the SCALE tarball
     - `scale-unwrapped` - The raw patched SCALE tarball tree
     - `scale-runtime` - SCALE CUDA runtime libraries and includes
