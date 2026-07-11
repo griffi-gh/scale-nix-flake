@@ -12,6 +12,13 @@ Packages:
 - `legacyPackages.x86_64-linux`:
   - `scalePackages`, `scalePackages_nightly`: Standalone SCALE toolchain
     (`scale-nvcc`, `scale-runtime`, etc...).
+    - `cccl` - version of CCCL shipped with the SCALE tarball
+    - `scale-unwrapped` - The raw patched SCALE tarball tree
+    - `scale-runtime` - SCALE CUDA runtime libraries and includes
+    - `scale-llvm-unwrapped` - SCALE LLVM compiler binaries (unwrapped)
+    - `scale-llvm` - Scale LLVM compiler wrapped with nixpkg's `wrapCC`
+    - `scale-nvcc` - The main SCALE NVCC compiler package
+
   - `nixpkgsScale`, `nixpkgsScale_nightly`: Full Nixpkgs instances with
     `cudaPackages` globally replaced by their respective SCALE packages.
     - This is soft-deprecated/only used for development purposes:
@@ -22,12 +29,3 @@ Overlays:
 - `overlays`:
   - `default`: Adds the SCALE packages to `pkgs`.
   - `cudaPackages`, `cudaPackages_nightly`: Overrides `cudaPackages` to use SCALE.
-
-scalePackages currently includes:
-
-- `cccl` - version of CCCL shipped with the SCALE tarball
-- `scale-unwrapped` - The raw patched SCALE tarball tree
-- `scale-runtime` - SCALE CUDA runtime libraries and includes
-- `scale-llvm-unwrapped` - SCALE LLVM compiler binaries (unwrapped)
-- `scale-llvm` - Scale LLVM compiler wrapped with nixpkg's `wrapCC`
-- `scale-nvcc` - The main SCALE NVCC compiler package
