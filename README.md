@@ -1,6 +1,10 @@
+
 # SCALE Nix Flake
 
-Nix flake for the [SCALE](https://scale-lang.com/) CUDA-compatible compiler toolkit.
+<img src=".assets/logo1.png" alt="Spectral Compute logo" float="left" align="left" width="100" height="100" />
+
+Nix flake for the [SCALE](https://scale-lang.com/) CUDA-compatible compiler toolkit
+(by Spectral Compute).
 
 Can be used as a drop-in overlay for compiling any existing
 packages that depend on `cudaPackages`!
