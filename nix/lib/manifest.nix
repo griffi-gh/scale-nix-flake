@@ -9,6 +9,7 @@
     };
   };
 
+  # NB: downloading nightly artifacts currently requires vpn access or sso account
   nightly =
     let
       commitHash = "88b990553e79b7aaa2b4f225ae714e9cdca83ab1";
