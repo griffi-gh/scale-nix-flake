@@ -11,7 +11,7 @@ packages that depend on `cudaPackages`!
 
 ## Outputs
 
-Packages (`legacyPackages`):
+Packages (`legacyPackages.<system>.*`):
 
 - `scalePackages`, `scalePackages_nightly`: Standalone SCALE toolchain.
   - `cccl` - version of CCCL shipped with the SCALE tarball
@@ -25,7 +25,7 @@ Packages (`legacyPackages`):
   - This is soft-deprecated/only used for development purposes:
     use `overlays.cudaPackages` overlays over this whenever possible)
 
-Overlays (`overlays`):
+Overlays (`overlays.*`):
 
 - `overlays`:
   - `default`: Adds the SCALE packages to `pkgs`.
