@@ -1,10 +1,7 @@
 { lib }:
-let
-  manifest = import ../scalePackages/data/scaleVersions.nix;
-  defaultVersion = "latest";
-in
 rec {
-  inherit defaultVersion;
+  defaultVersion = "latest";
+  manifest = import ../scalePackages/data/scaleVersions.nix;
   names = builtins.attrNames manifest;
   versionSuffix = name: lib.optionalString (name != defaultVersion) "_${name}";
   flattenVersions =
