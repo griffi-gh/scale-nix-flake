@@ -34,11 +34,14 @@ stdenvNoCC.mkDerivation {
     cp -Rs --no-preserve=mode ${scale-unwrapped}/include $out/include
 
     # https://github.com/spectral-compute/scale-validation/issues/62
+    # HACK incoming:
     rm $out/include/redscale_impl/builtins.h
-    sed -e 's/__host__ __DEVICE float rsqrt(float);/\/\/ __host__ __DEVICE float rsqrt(float);/' \
-        -e 's/__host__ __DEVICE double rsqrt(double);/\/\/ __host__ __DEVICE double rsqrt(double);/' \
-        -e 's/__host__ __DEVICE float rsqrtf(float);/\/\/ __host__ __DEVICE float rsqrtf(float);/' \
-        ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
+    sed -E \
+      -e 's@__host__ __DEVICE float rsqrt\(float\);@// __host__ __DEVICE float rsqrt(float);@' \
+      -e 's@__host__ __DEVICE double rsqrt\(double\);@// __host__ __DEVICE double rsqrt(double);@' \
+      -e 's@__host__ __DEVICE float rsqrtf\(float\);@// __host__ __DEVICE float rsqrtf(float);@' \
+      -e 's@^([[:space:]]*(__host__|__device__|__DEVICE)[[:space:]_A-Za-z]*\b(sinpi|cospi|tanpi|asinpi|acospi|atanpi|atan2pi)[fl]?[[:space:]]*\([^;]*\)[[:space:]]*;)@// \1@' \
+      ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
 
     runHook postInstall
   '';
