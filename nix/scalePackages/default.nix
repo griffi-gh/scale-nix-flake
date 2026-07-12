@@ -5,22 +5,21 @@
   requireFile,
 }:
 let
+  versions = import ../lib/versions.nix { inherit lib; };
+
   mkScaleScope = callPackage ./mkScaleScope.nix { };
-  versions = import ./data/scaleVersions.nix;
 
   fetchers = { inherit fetchurl requireFile; };
   mkSrc = source: fetchers.${source._type} (removeAttrs source [ "_type" ]);
-  scaleVersions = lib.mapAttrs (
-    _: meta:
-    mkScaleScope (
-      (removeAttrs meta [ "source" ])
-      // {
-        license = meta.license or import ./license/scaleFreeLicense.nix;
-        src = mkSrc meta.source;
-      }
-    )
-  ) versions;
+  mkScopeArg =
+    meta:
+    (removeAttrs meta [ "source" ])
+    // {
+      license = meta.license or import ./license/scaleFreeLicense.nix;
+      src = mkSrc meta.source;
+    };
+  scaleVersions = lib.mapAttrs (_: meta: mkScaleScope (mkScopeArg meta)) versions.manifest;
 in
 {
-  inherit mkScaleScope versions scaleVersions;
+  inherit mkScaleScope scaleVersions;
 }
