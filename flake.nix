@@ -2,6 +2,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     systems.url = "github:nix-systems/default";
+    flake-compat = {
+      url = "github:NixOS/flake-compat";
+      flake = false;
+    };
   };
 
   outputs =
