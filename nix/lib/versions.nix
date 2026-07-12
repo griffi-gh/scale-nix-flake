@@ -1,6 +1,6 @@
 { lib }:
 rec {
-  manifest = import ./data/manifest.nix;
+  manifest = import ./manifest.nix;
 
   names = builtins.attrNames manifest;
 
