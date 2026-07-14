@@ -17,13 +17,5 @@ let
 
   groups = lib.filter (n: lib.hasPrefix "nixpkgsScale" n) (lib.attrNames lp);
   jobs = lib.genAttrs groups (g: lib.genAttrs packages (p: lp.${g}.${p}));
-  allDrvs = lib.concatMap (g: lib.attrValues jobs.${g}) groups;
 in
 jobs
-// {
-  aggregate = pkgs.releaseTools.aggregate {
-    name = "scaleNixpkgs";
-    constituents = allDrvs;
-    meta.description = "Nixpkgs packages w/ SCALE cudaPackages";
-  };
-}
