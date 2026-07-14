@@ -1,0 +1,24 @@
+{
+  "enabled": 1,
+  "hidden": false,
+  "description": "generates the other jobsets",
+  "nixexprinput": "src",
+  "nixexprpath": ".hydra/jobsets.nix",
+  "checkinterval": 300,
+  "schedulingshares": 1,
+  "enableemail": false,
+  "emailoverride": "",
+  "keepnr": 10,
+  "inputs": {
+    "src": {
+      "type": "git",
+      "value": "https://github.com/griffi-gh/scale-nix-flake.git master",
+      "emailresponsible": false
+    },
+    "nixpkgs": {
+      "type": "git",
+      "value": "https://github.com/NixOS/nixpkgs.git nixos-unstable",
+      "emailresponsible": false
+    }
+  }
+}
