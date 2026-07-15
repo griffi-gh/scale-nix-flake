@@ -19,10 +19,13 @@ let
   groups = lib.filter (n: lib.hasPrefix "nixpkgsScale" n) (lib.attrNames lp);
   jobs = lib.genAttrs groups (
     g:
-    let
-      attrPath = lib.splitString "." lp.${g};
-    in
-    lib.genAttrs packages (p: lib.attrsets.attrByPath p null attrPath)
+    lib.genAttrs packages (
+      p:
+      let
+        attrPath = lib.splitString "." p;
+      in
+      lib.attrsets.attrByPath attrPath null lp.${g}
+    )
   );
 in
 jobs
