@@ -50,12 +50,12 @@ let
     };
 
   jobsets = lib.mapAttrs (name: mkJobset) (
-    (versions.flattenVersionsAll "scalePackages" (version: {
+    (versions.flattenVersions' "scalePackages" (version: {
       description = "All SCALE packages (${version})";
       path = ".hydra/jobsets/scalePackages.nix";
       inputs.suffix = mkString (versions.versionSuffix version);
     }))
-    // (versions.flattenVersionsAll "nixpkgsScale" (version: {
+    // (versions.flattenVersions' "nixpkgsScale" (version: {
       description = "Nixpkgs packages w/ SCALE cudaPackages (${version})";
       path = ".hydra/jobsets/nixpkgsScale.nix";
       inputs.suffix = mkString (versions.versionSuffix version);
