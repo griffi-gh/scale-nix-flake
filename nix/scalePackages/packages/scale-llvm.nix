@@ -20,7 +20,7 @@ wrapCCWith {
     # kill hardening
     > $out/nix-support/add-hardening.sh
 
-    # emulate leaky cstdlib header from CUDA
+    # HACK: emulate leaky cstdlib header from CUDA
     echo "-include cstdlib" >> $out/nix-support/libcxx-cxxflags
   '';
 }
