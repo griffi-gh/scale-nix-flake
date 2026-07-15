@@ -50,16 +50,28 @@ let
     };
 
   jobsets = lib.mapAttrs (name: mkJobset) (
-    (versions.flattenVersions' "scalePackages" (version: {
-      description = "All SCALE packages (${version})";
-      path = ".hydra/jobsets/scalePackages.nix";
-      inputs.suffix = mkString (versions.versionSuffix version);
-    }))
-    // (versions.flattenVersions' "nixpkgsScale" (version: {
-      description = "Nixpkgs packages w/ SCALE cudaPackages (${version})";
-      path = ".hydra/jobsets/nixpkgsScale.nix";
-      inputs.suffix = mkString (versions.versionSuffix version);
-    }))
+    (versions.flattenVersions' "scalePackages" (
+      channel:
+      let
+        version = versions.manifest."${channel}".version;
+      in
+      {
+        description = "All SCALE packages (${channel}, v${version})";
+        path = ".hydra/jobsets/scalePackages.nix";
+        inputs.suffix = mkString (versions.versionSuffix channel);
+      }
+    ))
+    // (versions.flattenVersions' "nixpkgsScale" (
+      channel:
+      let
+        version = versions.manifest."${channel}".version;
+      in
+      {
+        description = "Nixpkgs w/ SCALE cudaPackages (${channel}, v${version})";
+        path = ".hydra/jobsets/nixpkgsScale.nix";
+        inputs.suffix = mkString (versions.versionSuffix channel);
+      }
+    ))
   );
 in
 {
