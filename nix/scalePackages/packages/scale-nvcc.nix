@@ -12,7 +12,7 @@
   ...
 }:
 let
-  inherit (cudaPackages) cudaMajorMinorVersion;
+  inherit (cudaPackages) cudaMajorMinorVersion cudaMajorMinorPatchVersion;
 
   ccmap = writeText "ccmap.conf" ''
     ${target} ${nv_target}
@@ -33,7 +33,7 @@ let
     preConfigureHooks+=(setupScaleEnv)
   '';
 
-  nvccFlags = lib.escapeShellArgs [
+  extraNvccFlags = lib.escapeShellArgs [
     "--cuda-ccmap=${ccmap}"
     "--cuda-path=${scale-runtime}"
   ];
@@ -63,13 +63,26 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out/{bin,share/scale,nvvm/libdevice}
 
+    # HACK 1:
+    # basically we create a new wrapper of the *unwrapped* nvcc (.nvcc-argv0), overriding it's target argv0 to $out/bin/nvcc
+    # then, we copy the wrapCC wrapped version of nvcc ($out/bin/nvcc), and override its target unwrapped executable path to actaully
+    # point to the in .nvcc-argv0 our directory, instead of the original unwrapped clang
+    # This fixes InstalledDir/version.txt resolution to actually point to the wrapped derivation;
+    # (This solution is ceirtanly not ideal buuuuuut should be good enough i guess....)
+    makeWrapper "${scale-llvm.cc}/bin/nvcc" $out/bin/.nvcc-argv0 \
+      --argv0 "$out/bin/nvcc";
     cp ${scale-llvm}/bin/clang $out/bin/nvcc
     substituteInPlace $out/bin/nvcc \
-      --replace-fail "${scale-llvm.cc}/bin/clang" "${scale-llvm.cc}/bin/nvcc" \
+      --replace-fail "${scale-llvm.cc}/bin/clang" "$out/bin/.nvcc-argv0" \
       --replace-warn "isCxx=0" "isCxx=1"
 
+    # HACK 2:
+    # we need to add some extra stuff, but can't edit the existing wrapper....
+    # so here, we wrap the wrapper :p
+    # (POP QUIZ: how many layers of wrappers does an `nvcc` call go through in this setup)
     wrapProgram $out/bin/nvcc \
-      --add-flags "${nvccFlags}"
+      --add-flags "${extraNvccFlags}" \
+      --set SCALE_CUDA_VERSION "${cudaMajorMinorVersion}"
 
     ln -s ${ccmap} $out/share/scale/ccmap.conf
     ln -s ${scale-llvm.cc}/bin/amdgpu-arch $out/bin/amdgpu-arch
@@ -81,6 +94,10 @@ stdenvNoCC.mkDerivation {
 
     ln -s ${scale-runtime}/include $out/include
     ln -s ${scale-runtime}/lib $out/lib
+
+    # HACK: needed for the "Cuda compilation tools..." line in "nvcc --version" to actually make sense
+    # (SCALE_CUDA_VERSION doesnt seem to actually work in nvcc mode??? either way good to have)
+    echo "CUDA Version ${cudaMajorMinorPatchVersion} (Actually, no. This is the SCALE compiler; version v${_scale.version})" > $out/version.txt
 
     runHook postInstall
   '';
