@@ -13,9 +13,16 @@ let
     "colmap"
     "opencv"
     "blender"
+    "cudaPackages.saxpy"
   ];
 
   groups = lib.filter (n: lib.hasPrefix "nixpkgsScale" n) (lib.attrNames lp);
-  jobs = lib.genAttrs groups (g: lib.genAttrs packages (p: lp.${g}.${p}));
+  jobs = lib.genAttrs groups (
+    g:
+    let
+      attrPath = lib.splitString "." lp.${g};
+    in
+    lib.genAttrs packages (p: lib.attrsets.attrByPath p null attrPath)
+  );
 in
 jobs
