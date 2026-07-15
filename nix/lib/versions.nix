@@ -9,5 +9,5 @@ rec {
 
   flattenVersions =
     prefix: lib.mapAttrs' (name: v: lib.nameValuePair "${prefix}${versionSuffix name}" v);
-  flattenVersions' = gen: flattenVersions (lib.genAttrs names gen);
+  flattenVersions' = prefix: gen: flattenVersions prefix (lib.genAttrs names gen);
 }
