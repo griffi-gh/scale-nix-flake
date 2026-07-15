@@ -9,10 +9,18 @@ let
   pkgs = import nixpkgs { inherit system; };
   inherit (pkgs) lib;
 
+  versions = import ../nix/lib/versions.nix { inherit lib; };
+
+  mkString = value: {
+    type = "string";
+    inherit value;
+  };
+
   mkJobset =
     {
       path,
       description ? "",
+      inputs ? { },
     }:
     {
       inherit description;
@@ -37,19 +45,22 @@ let
           value = "https://github.com/NixOS/nixpkgs.git nixos-unstable";
           emailresponsible = false;
         };
-      };
+      }
+      // inputs;
     };
 
-  jobsets = lib.mapAttrs (name: mkJobset) {
-    scalePackages = {
-      description = "All SCALE packages";
+  jobsets = lib.mapAttrs (name: mkJobset) (
+    (versions.flattenVersionsAll "scalePackages" (version: {
+      description = "All SCALE packages (${version})";
       path = ".hydra/jobsets/scalePackages.nix";
-    };
-    nixpkgsScale = {
-      description = "Nixpkgs packages w/ SCALE cudaPackages";
+      inputs.suffix = mkString (versions.versionSuffix version);
+    }))
+    // (versions.flattenVersionsAll "nixpkgsScale" (version: {
+      description = "Nixpkgs packages w/ SCALE cudaPackages (${version})";
       path = ".hydra/jobsets/nixpkgsScale.nix";
-    };
-  };
+      inputs.suffix = mkString (versions.versionSuffix version);
+    }))
+  );
 in
 {
   jobsets = pkgs.writers.writeJSON "jobsets.json" jobsets;

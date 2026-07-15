@@ -1,13 +1,17 @@
-{ src, nixpkgs, ... }:
+{
+  src,
+  nixpkgs,
+  system ? builtins.currentSystem,
+  suffix ? "",
+  ...
+}:
 let
-  system = "x86_64-linux";
-  pkgs = import nixpkgs { inherit system; };
-  inherit (pkgs) lib;
+  lib = import "${nixpkgs}/lib";
 
   flake = import src;
   lp = flake.legacyPackages.${system};
 
-  groups = lib.filter (n: lib.hasPrefix "scalePackages" n) (lib.attrNames lp);
-  jobs = lib.genAttrs groups (g: lib.filterAttrs (_: lib.isDerivation) lp.${g});
+  pkgSet = lp."scalePackages${suffix}";
+  jobs = lib.filterAttrs (_: lib.isDerivation) pkgSet;
 in
 jobs
