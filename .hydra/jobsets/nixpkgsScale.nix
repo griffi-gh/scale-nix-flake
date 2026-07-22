@@ -11,14 +11,16 @@ let
   flake = import src;
   lp = flake.legacyPackages.${system};
 
+  packagesData = lib.mapAttrsToListRecursive (path: value: "${path}") (import ./nixpkgsScale_data);
+
   # TODO: automate this
-  packages = [
-    "gromacs"
-    "colmap"
-    "opencv"
-    "blender"
-    "cudaPackages.saxpy"
-  ];
+  # packages = [
+  #   "gromacs"
+  #   "colmap"
+  #   "opencv"
+  #   "blender"
+  #   "cudaPackages.saxpy"
+  # ];
 
   pkgSet = lp."nixpkgsScale${suffix}";
   jobs = lib.genAttrs packages (
