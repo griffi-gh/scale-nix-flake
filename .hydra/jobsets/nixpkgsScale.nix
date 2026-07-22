@@ -11,7 +11,8 @@ let
   flake = import src;
   lp = flake.legacyPackages.${system};
 
-  packagesData = lib.mapAttrsToListRecursive (path: value: "${path}") (import ./nixpkgsScale_data);
+  packagesData = lib.importJSON ./nixpkgsScale_data/data.json;
+  packages = lib.mapAttrsToListRecursive (path: value: "${path}") packagesData;
 
   # TODO: automate this
   # packages = [
