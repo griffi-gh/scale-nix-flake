@@ -9,27 +9,18 @@ let
   lib = import "${nixpkgs}/lib";
 
   flake = import src;
-  lp = flake.legacyPackages.${system};
+  flake_legacyPackages = flake.legacyPackages.${system};
 
   packagesData = lib.importJSON ./nixpkgsScale_data/data.json;
-  packages = lib.mapAttrsToListRecursive (path: value: "${path}") packagesData;
+  packagesPaths = lib.mapAttrsToListRecursive (path: value: path) packagesData;
 
-  # TODO: automate this
-  # packages = [
-  #   "gromacs"
-  #   "colmap"
-  #   "opencv"
-  #   "blender"
-  #   "cudaPackages.saxpy"
-  # ];
-
-  pkgSet = lp."nixpkgsScale${suffix}";
-  jobs = lib.genAttrs packages (
-    p:
-    let
-      attrPath = lib.splitString "." p;
-    in
-    lib.attrsets.attrByPath attrPath null pkgSet
+  nixpkgs_pkgSet = flake_legacyPackages."nixpkgsScale${suffix}";
+  jobs = lib.genAttrs' packagesPaths (
+    attrPath:
+    {
+      name = lib.join "." attrPath;
+      value = lib.attrsets.attrByPath attrPath null nixpkgs_pkgSet;
+    }
   );
 in
 jobs
