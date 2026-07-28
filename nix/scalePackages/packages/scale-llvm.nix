@@ -1,6 +1,7 @@
 {
   wrapCCWith,
   cudaPackages,
+  scale-runtime,
   scale-llvm-unwrapped,
   ...
 }:
@@ -20,7 +21,9 @@ wrapCCWith {
     # kill hardening
     > $out/nix-support/add-hardening.sh
 
+    # HACK: ensure redscale wrappers are searched before cstdlib
     # HACK: emulate leaky cstdlib header from CUDA
-    echo "-include cstdlib" >> $out/nix-support/libcxx-cxxflags
+    flags="$(< $out/nix-support/libcxx-cxxflags)"
+    echo "-isystem ${scale-runtime}/include -isystem ${scale-runtime}/include/redscale_impl/wrappers $flags -include cstdlib" > $out/nix-support/libcxx-cxxflags
   '';
 }
