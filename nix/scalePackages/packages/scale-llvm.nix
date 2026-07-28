@@ -31,6 +31,6 @@ wrapCCWith {
     # HACK: ensure redscale wrappers are searched before cstdlib;
     # also, include our preinclude hack
     flags="$(< $out/nix-support/libcxx-cxxflags)"
-    echo "-isystem ${scale-runtime}/include -isystem ${scale-runtime}/include/redscale_impl/wrappers $flags -include ${preincludeHack}" > $out/nix-support/libcxx-cxxflags
+    echo "-isystem ${scale-runtime}/include/redscale_impl/wrappers $flags -include ${preincludeHack}" > $out/nix-support/libcxx-cxxflags
   '';
 }
