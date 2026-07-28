@@ -1,7 +1,7 @@
 {
   wrapCCWith,
   cudaPackages,
-  scale-runtime,
+  scale-runtime, # TODO: scale-llvm wrapper should NOT depend on scale-runtime
   scale-llvm-unwrapped,
   ...
 }:
