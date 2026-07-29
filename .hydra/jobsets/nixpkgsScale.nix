@@ -9,17 +9,32 @@ let
   lib = import "${nixpkgs}/lib";
 
   flake = import src;
-  flake_legacyPackages = flake.legacyPackages.${system};
 
   packagesData = lib.importJSON ./nixpkgsScale_data/data.json;
   packagesPaths = lib.mapAttrsToListRecursive (path: value: path) packagesData;
 
-  nixpkgs_pkgSet = flake_legacyPackages."nixpkgsScale${suffix}";
+  sourcePkgs = import nixpkgs {
+    inherit system;
+    __allowFileset = true;
+    config = {
+      allowAliases = true; # XXX: should this be off
+      allowUnfree = true;
+      allowBroken = false;
+      allowInsecure = true;
+      cudaSupport = true;
+      inHydra = true;
+    };
+    overlays = [
+      flake.overlays.scalePackages
+      flake.overlays."cudaPackages${suffix}"
+    ];
+  };
+
   jobs = lib.genAttrs' packagesPaths (
     attrPath:
     {
       name = lib.join "." attrPath;
-      value = lib.attrsets.attrByPath attrPath null nixpkgs_pkgSet;
+      value = lib.attrsets.attrByPath attrPath null sourcePkgs;
     }
   );
 in
