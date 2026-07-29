@@ -6,6 +6,9 @@
   _scale,
   ...
 }:
+let
+
+in
 stdenvNoCC.mkDerivation {
   pname = "scale-runtime";
   inherit (_scale) version;
@@ -42,6 +45,10 @@ stdenvNoCC.mkDerivation {
       -e 's@__host__ __DEVICE float rsqrtf\(float\);@// __host__ __DEVICE float rsqrtf(float);@' \
       -e 's@^([[:space:]]*(__host__|__device__|__DEVICE)[[:space:]_A-Za-z]*\b(sinpi|cospi|tanpi|asinpi|acospi|atanpi|atan2pi)[fl]?[[:space:]]*\([^;]*\)[[:space:]]*;)@// \1@' \
       ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
+
+    # Give consumers link-time rpath to $out/lib
+    mkdir -p $out/nix-support
+    echo 'export NIX_LDFLAGS="''${NIX_LDFLAGS:-} -L${placeholder "out"}/lib -rpath ${placeholder "out"}/lib"' > $out/nix-support/setup-hook
 
     runHook postInstall
   '';
