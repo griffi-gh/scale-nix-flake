@@ -6,9 +6,6 @@
   _scale,
   ...
 }:
-let
-
-in
 stdenvNoCC.mkDerivation {
   pname = "scale-runtime";
   inherit (_scale) version;
@@ -40,10 +37,10 @@ stdenvNoCC.mkDerivation {
     # HACK incoming:
     rm $out/include/redscale_impl/builtins.h
     sed -E \
-      -e 's@__host__ __DEVICE float rsqrt\(float\);@// __host__ __DEVICE float rsqrt(float);@' \
-      -e 's@__host__ __DEVICE double rsqrt\(double\);@// __host__ __DEVICE double rsqrt(double);@' \
-      -e 's@__host__ __DEVICE float rsqrtf\(float\);@// __host__ __DEVICE float rsqrtf(float);@' \
-      -e 's@^([[:space:]]*(__host__|__device__|__DEVICE)[[:space:]_A-Za-z]*\b(sinpi|cospi|tanpi|asinpi|acospi|atanpi|atan2pi)[fl]?[[:space:]]*\([^;]*\)[[:space:]]*;)@// \1@' \
+      -e 's@__host__ __DEVICE float rsqrt\(float\);@__DEVICE float rsqrt(float);@' \
+      -e 's@__host__ __DEVICE double rsqrt\(double\);@__DEVICE double rsqrt(double);@' \
+      -e 's@__host__ __DEVICE float rsqrtf\(float\);@__DEVICE float rsqrtf(float);@' \
+      -e 's@^([[:space:]]*(__host__)[[:space:]_A-Za-z]*\b(sinpi|cospi|tanpi|asinpi|acospi|atanpi|atan2pi)[fl]?[[:space:]]*\([^;]*\)[[:space:]]*;)@// \1@' \
       ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
 
     # Give consumers link-time rpath to $out/lib
