@@ -12,12 +12,14 @@ scaleScope: final: prev: {
       # (HACK: we have all of the libs in single scale-runtime derivation rn)
       cuda_cudart = scaleScope.scale-runtime;
       cuda_compat = scaleScope.scale-runtime;
+      cuda_nvrtc = scaleScope.scale-runtime;
       libcufft = scaleScope.scale-runtime;
       libcublas = scaleScope.scale-runtime;
       libcurand = scaleScope.scale-runtime;
       libcusolver = scaleScope.scale-runtime;
       libcusparse = scaleScope.scale-runtime;
       libcusparse_lt = scaleScope.scale-runtime;
+      libnvjitlink = scaleScope.scale-runtime;
       cudnn = scaleScope.scale-runtime;
 
       # cccl: override both legacy and the new alias

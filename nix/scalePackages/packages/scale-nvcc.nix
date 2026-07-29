@@ -4,6 +4,7 @@
   cudaPackages,
   writeText,
   makeWrapper,
+  makeSetupHook,
   scale-llvm,
   scale-runtime,
   target ? "gfx1103",
@@ -19,19 +20,22 @@ let
     ${target}
   '';
 
-  setupScaleEnvHook = writeText "setup-scale-hook.sh" ''
-    setupScaleEnv() {
-      export CUDAARCHS="${nv_target}"
-      export CMAKE_CUDA_ARCHITECTURES="${nv_target}"
-      cmakeFlagsArray+=(
-        "-DCUDAARCHS=${nv_target}"
-        "-DCMAKE_CUDA_ARCHITECTURES=${nv_target}"
-        "-DCUDA_VERSION=${cudaMajorMinorVersion}"
-        "-DCUDA_VERSION_STRING=${cudaMajorMinorVersion}"
-      )
-    }
-    preConfigureHooks+=(setupScaleEnv)
-  '';
+  setupScaleEnvHook = makeSetupHook {
+    name = "setup-scale-hook";
+  } (writeText "setup-scale-hook.sh" ''
+    export CUDAARCHS="${nv_target}"
+
+    # CMake setup
+    export CMAKE_CUDA_ARCHITECTURES="${nv_target}"
+    appendToVar cmakeFlags "-DCUDAARCHS=${nv_target}"
+    appendToVar cmakeFlags "-DCMAKE_CUDA_ARCHITECTURES=${nv_target}"
+    appendToVar cmakeFlags "-DCUDA_VERSION=${cudaMajorMinorVersion}"
+    appendToVar cmakeFlags "-DCUDA_VERSION_STRING=${cudaMajorMinorVersion}"
+
+    # HACK: https://code.spectralcompute.com/spectral-compute/scale/issues/1166
+    # (projects based on cudarc cannot disover CUDA version with SCALE)
+    export CUDARC_CUDA_VERSION="${lib.replaceString "." "0" cudaMajorMinorVersion}0"
+  '');
 
   extraNvccFlags = lib.escapeShellArgs [
     "--cuda-ccmap=${ccmap}"
