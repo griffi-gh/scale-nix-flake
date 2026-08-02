@@ -31,6 +31,9 @@ let
         # cccl: override both the legacy name and the new alias
         cuda_cccl = scaleScope.cccl;
         cccl = scaleScope.cccl;
+
+        # TODO: set flags.cudaCapabilities to match (SCALE) cuda_nvcc.nv_target
+        # (keep in mind the format, aka 86 -> "8.6")
       }
     );
 in
