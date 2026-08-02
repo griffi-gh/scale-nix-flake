@@ -22,6 +22,7 @@ let
       allowBroken = false;
       allowInsecure = true;
       cudaSupport = true;
+      cudaCapabilities = [ "8.6" ]; # TODO: handle this in the overlay instead
       inHydra = true;
     };
     overlays = [
