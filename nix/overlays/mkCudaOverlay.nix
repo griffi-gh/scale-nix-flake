@@ -1,6 +1,6 @@
 scaleScope: final: prev:
 let
-  inherit (final) lib;
+  inherit (prev) lib;
 
   mkOverrideCudaScope =
     cudaScope:
