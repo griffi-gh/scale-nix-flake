@@ -1,0 +1,161 @@
+diff --git a/include/library_types.h b/include/library_types.h
+index 394200237..15225bca9 100644
+--- a/include/library_types.h
++++ b/include/library_types.h
+@@ -54,11 +54,11 @@ typedef enum cudaEmulationStrategy_t
+     CUDA_EMULATION_STRATEGY_EAGER,
+ } cudaEmulationStrategy;
+ 
+-typedef enum cudaEmulationMantissaControl
++typedef enum cudaEmulationMantissaControl_t
+ {
+     CUDA_EMULATION_MANTISSA_CONTROL_DYNAMIC,
+     CUDA_EMULATION_MANTISSA_CONTROL_FIXED
+-} cudaEmulationMantissaControl_t;
++} cudaEmulationMantissaControl;
+ 
+ typedef enum cudaEmulationSpecialValuesSupport_t
+ {
+diff --git a/include/blas_impl/extension.inc b/include/blas_impl/extension.inc
+index 90bfe158b..f9d2ad193 100644
+--- a/include/blas_impl/extension.inc
++++ b/include/blas_impl/extension.inc
+@@ -1,5 +1,10 @@
+ #include <cuda_fp16.h>
+ 
++#ifdef __cplusplus
++#define GPUBLAS_EXTERN_C extern "C"
++#else
++#define GPUBLAS_EXTERN_C
++#endif
+ 
+ #define GemmEx_ARGS cuToRoc(transa), cuToRoc(transb), m, n, k, alpha, A, cuToRoc(Atype), lda, B, cuToRoc(Btype), ldb, beta, C, cuToRoc(Ctype), ldc, C, cuToRoc(Ctype), ldc, to_rocblas_datatype(computeType), to_rocblas_gemm_algo(algo), -1, 0
+ DIRECT_BLAS_API_N(GemmEx, _gemm_ex,
+@@ -97,7 +102,7 @@ cublasStatus_t cublasGemmStridedBatchedEx(cublasHandle_t handle,
+ #endif /* __cplusplus */
+ 
+ 
+-extern "C" GPUBLAS_EXPORT cublasStatus_t cublasSgemmEx(cublasHandle_t handle,
++GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublasSgemmEx(cublasHandle_t handle,
+     cublasOperation_t transa,
+     cublasOperation_t transb,
+     int m, int n, int k,
+@@ -107,7 +112,7 @@ extern "C" GPUBLAS_EXPORT cublasStatus_t cublasSgemmEx(cublasHandle_t handle,
+     const float *beta,
+     void *C, cudaDataType_t Ctype, int ldc
+ );
+-extern "C" GPUBLAS_EXPORT cublasStatus_t cublasCgemmEx(cublasHandle_t handle,
++GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublasCgemmEx(cublasHandle_t handle,
+     cublasOperation_t transa,
+     cublasOperation_t transb,
+     int m, int n, int k,
+@@ -119,7 +124,7 @@ extern "C" GPUBLAS_EXPORT cublasStatus_t cublasCgemmEx(cublasHandle_t handle,
+ );
+ 
+ #ifdef __cplusplus
+-extern "C" GPUBLAS_EXPORT cublasStatus_t cublasHgemmStridedBatched(cublasHandle_t handle,
++GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublasHgemmStridedBatched(cublasHandle_t handle,
+     cublasOperation_t transa,
+     cublasOperation_t transb,
+     int m, int n, int k,
+@@ -135,7 +140,7 @@ extern "C" GPUBLAS_EXPORT cublasStatus_t cublasHgemmStridedBatched(cublasHandle_
+ );
+ #endif /* __cplusplus */
+ 
+-extern "C" GPUBLAS_EXPORT cublasStatus_t cublasSgemmStridedBatched(cublasHandle_t handle,
++GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublasSgemmStridedBatched(cublasHandle_t handle,
+     cublasOperation_t transa,
+     cublasOperation_t transb,
+     int m, int n, int k,
+@@ -149,7 +154,7 @@ extern "C" GPUBLAS_EXPORT cublasStatus_t cublasSgemmStridedBatched(cublasHandle_
+     long long int strideC,
+     int batchCount
+ );
+-extern "C" GPUBLAS_EXPORT cublasStatus_t cublasDgemmStridedBatched(cublasHandle_t handle,
++GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublasDgemmStridedBatched(cublasHandle_t handle,
+     cublasOperation_t transa,
+     cublasOperation_t transb,
+     int m, int n, int k,
+@@ -163,7 +168,7 @@ extern "C" GPUBLAS_EXPORT cublasStatus_t cublasDgemmStridedBatched(cublasHandle_
+     long long int strideC,
+     int batchCount
+ );
+-extern "C" GPUBLAS_EXPORT cublasStatus_t cublasCgemmStridedBatched(cublasHandle_t handle,
++GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublasCgemmStridedBatched(cublasHandle_t handle,
+     cublasOperation_t transa,
+     cublasOperation_t transb,
+     int m, int n, int k,
+@@ -178,7 +183,7 @@ extern "C" GPUBLAS_EXPORT cublasStatus_t cublasCgemmStridedBatched(cublasHandle_
+     int batchCount
+ );
+ 
+-extern "C" GPUBLAS_EXPORT cublasStatus_t cublasZgemmStridedBatched(cublasHandle_t handle,
++GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublasZgemmStridedBatched(cublasHandle_t handle,
+     cublasOperation_t transa,
+     cublasOperation_t transb,
+     int m, int n, int k,
+@@ -254,7 +259,7 @@ DIRECT_BLAS_API_N(DotcEx, _dotc_ex,
+ * getrfBatched()
+ */
+ #define __GETRF_BATCHED(LETTER, TYPE) \
+-    extern "C" GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## getrfBatched( \
++    GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## getrfBatched( \
+         cublasHandle_t handle, \
+         int n, \
+         TYPE *const Aarray[], \
+@@ -275,7 +280,7 @@ __GETRF_BATCHED(Z, cuDoubleComplex)
+ * getriBatched()
+ */
+ #define __GETRI_BATCHED(LETTER, TYPE) \
+-    extern "C" GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## getriBatched( \
++    GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## getriBatched( \
+         cublasHandle_t handle, \
+         int n, \
+         const TYPE *const Aarray[], \
+@@ -298,7 +303,7 @@ __GETRI_BATCHED(Z, cuDoubleComplex)
+  * geqrfBatched()
+  */
+ #define __GEQRF_BATCHED(LETTER, TYPE) \
+-    extern "C" GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## geqrfBatched( \
++    GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## geqrfBatched( \
+         cublasHandle_t handle, \
+         int m, \
+         int n, \
+@@ -320,7 +325,7 @@ __GEQRF_BATCHED(Z, cuDoubleComplex)
+  * getrsBatched()
+  */
+ #define __GETRS_BATCHED(LETTER, TYPE) \
+-    extern "C" GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## getrsBatched( \
++    GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t cublas ## LETTER ## getrsBatched( \
+         cublasHandle_t handle, \
+         cublasOperation_t trans, \
+         int n, \
+@@ -352,7 +357,7 @@ __GETRS_BATCHED(Z, cuDoubleComplex)
+  * ROCm provides the equivalent least-squares functions through rocSOLVER
+  */
+ #define __GELS_BATCHED(LETTER, TYPE) \
+-    extern "C" GPUBLAS_EXPORT cublasStatus_t \
++    GPUBLAS_EXTERN_C GPUBLAS_EXPORT cublasStatus_t \
+     cublas ## LETTER ## gelsBatched_v2( \
+         cublasHandle_t handle, \
+         cublasOperation_t trans, \
+diff --git a/include/blas_impl/legacy.inc b/include/blas_impl/legacy.inc
+index 14e2e0c51..932f5e614 100644
+--- a/include/blas_impl/legacy.inc
++++ b/include/blas_impl/legacy.inc
+@@ -826,11 +826,11 @@ LEGACY_BLAS_API(Z, gemm,
+ LEGACY_BLAS_API(H, gemm,
+     char transa, char transb,
+     int m, int n, int k,
+-    __half alpha,
+-    const __half *A, int lda,
+-    const __half *B, int ldb,
+-    __half beta,
+-    __half *C, int ldc
++    struct __half alpha,
++    const struct __half *A, int lda,
++    const struct __half *B, int ldb,
++    struct __half beta,
++    struct __half *C, int ldc
+ )
+ #undef gemm_ARGS

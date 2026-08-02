@@ -31,7 +31,11 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/lib
     ln -s $out/lib $out/lib64
     cp -Rs --no-preserve=mode ${scale-unwrapped}/targets/amdgpu/lib/* $out/lib
-    cp -Rs --no-preserve=mode ${scale-unwrapped}/include $out/include
+    cp -RL --no-preserve=mode ${scale-unwrapped}/include $out/include
+
+    # Give consumers link-time rpath to $out/lib
+    mkdir -p $out/nix-support
+    echo 'export NIX_LDFLAGS="''${NIX_LDFLAGS:-} -L${placeholder "out"}/lib -rpath ${placeholder "out"}/lib"' > $out/nix-support/setup-hook
 
     # https://github.com/spectral-compute/scale-validation/issues/62
     # HACK incoming:
@@ -43,9 +47,8 @@ stdenvNoCC.mkDerivation {
       -e 's@^([[:space:]]*(__host__)[[:space:]_A-Za-z]*\b(sinpi|cospi|tanpi|asinpi|acospi|atanpi|atan2pi)[fl]?[[:space:]]*\([^;]*\)[[:space:]]*;)@// \1@' \
       ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
 
-    # Give consumers link-time rpath to $out/lib
-    mkdir -p $out/nix-support
-    echo 'export NIX_LDFLAGS="''${NIX_LDFLAGS:-} -L${placeholder "out"}/lib -rpath ${placeholder "out"}/lib"' > $out/nix-support/setup-hook
+    # HACK: https://code.spectralcompute.com/spectral-compute/scale/issues/1163
+    patch -p1 -d $out < ${./patches/cublas-fix.patch}
 
     runHook postInstall
   '';
