@@ -6,6 +6,9 @@
   _scale,
   ...
 }:
+let
+  isNightly = (lib.versions.major _scale.version) == "0";
+in
 stdenvNoCC.mkDerivation {
   pname = "scale-runtime";
   inherit (_scale) version;
@@ -48,7 +51,12 @@ stdenvNoCC.mkDerivation {
       ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
 
     # HACK: https://code.spectralcompute.com/spectral-compute/scale/issues/1163
-    patch -p1 -d $out < ${./patches/cublas-fix.patch}
+    ${
+      # (only applies to nightly)
+      lib.optionalString isNightly ''
+        patch -p1 -d $out < ${./patches/cublas-fix-nightly.patch}
+      ''
+    }
 
     runHook postInstall
   '';
