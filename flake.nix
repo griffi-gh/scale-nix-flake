@@ -37,7 +37,10 @@
 
           nixpkgsScale = versions.flattenVersions "nixpkgsScale" (
             lib.genAttrs versions.names (
-              name: pkgs.extend overlays."cudaPackages${versions.versionSuffix name}"
+              name: pkgs.appendOverlays [
+                overlays."cudaPackages${versions.versionSuffix name}"
+                overlays.scaleBandaids
+              ]
             )
           );
         in

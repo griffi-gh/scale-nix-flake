@@ -2,8 +2,9 @@
 let
   versions = import ../lib/versions.nix { inherit lib; };
 
-  mkCudaOverlay = import ./mkCudaOverlay.nix;
   scalePackages = import ./scalePackages.nix;
+  mkCudaOverlay = import ./mkCudaOverlay.nix;
+  scaleBandaids = import ./scaleBandaids.nix;
 
   mkCudaOverlayFor =
     name:
@@ -15,6 +16,7 @@ let
   );
 in
 {
+  inherit scaleBandaids;
   inherit scalePackages;
 }
 // cudaOverlays
