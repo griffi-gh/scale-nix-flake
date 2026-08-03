@@ -1,5 +1,8 @@
 # fixes packages that currently don't compile w/SCALE due to missing features
 final: prev:
+let
+  inherit (prev) lib;
+in
 (
   {
     onnxruntime = prev.onnxruntime.override {
