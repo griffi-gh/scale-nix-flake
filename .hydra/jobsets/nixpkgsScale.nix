@@ -28,6 +28,7 @@ let
     overlays = [
       flake.overlays.scalePackages
       flake.overlays."cudaPackages${suffix}"
+      flake.overlays.scaleBandaids
     ];
   };
 
