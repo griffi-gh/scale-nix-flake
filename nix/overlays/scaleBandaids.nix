@@ -5,6 +5,9 @@ let
 in
 (
   {
+    opencv = prev.opencv.override {
+      cudaSupport = false; # requires cudnn, not supported
+    };
     onnxruntime = prev.onnxruntime.override {
       cudaSupport = false; # requires cudnn, not supported
       ncclSupport = false; # nccl does not build under SCALE
