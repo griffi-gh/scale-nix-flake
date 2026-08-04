@@ -26,6 +26,7 @@ let
         libcusparse = scaleScope.scale-runtime;
         libcusparse_lt = scaleScope.scale-runtime;
         libnvjitlink = scaleScope.scale-runtime;
+        libnpp = scaleScope.scale-runtime;
         cudnn = scaleScope.scale-runtime;
 
         # cccl: override both the legacy name and the new alias
