@@ -50,14 +50,6 @@ stdenvNoCC.mkDerivation {
       -e 's@^([[:space:]]*(__host__)[[:space:]_A-Za-z]*\b(sinpi|cospi|tanpi|asinpi|acospi|atanpi|atan2pi)[fl]?[[:space:]]*\([^;]*\)[[:space:]]*;)@// \1@' \
       ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
 
-    # HACK: https://code.spectralcompute.com/spectral-compute/scale/issues/1163
-    ${
-      # (only applies to nightly)
-      lib.optionalString isNightly ''
-        patch -p1 -d $out < ${./patches/cublas-fix-nightly.patch}
-      ''
-    }
-
     runHook postInstall
   '';
 
