@@ -1,11 +1,13 @@
 {
   latest = rec {
-    version = "1.7.1";
-    source = rec {
+    version = "1.7.3";
+    source = let
+      platform = if builtins.compareVersions version "1.7.3" >= 0 then "Linux" else "amd64";
+    in rec {
       _type = "fetchurl";
-      name = "scale-${version}-amd64.tar.xz";
+      name = "scale-${version}-${platform}.tar.xz";
       url = "https://pkgs.scale-lang.com/tar/${name}";
-      hash = "sha256-Bgo2J3JfYABaaeIJszLXhH/XwD65UYvnBV3cADxzor4=";
+      hash = "sha256-hpr7FeapR8eWbN+UCGM+q2OQsh3a43VVOOujEnxocdo=";
     };
   };
 
