@@ -6,7 +6,7 @@ in
 (
   {
     opencv = prev.opencv.override {
-      cudaSupport = false; # requires cudnn, not supported
+      enableCuda = false; # hard-requires NPP (libnppc, libnppial, ...), which SCALE doesn't provide
     };
     onnxruntime = prev.onnxruntime.override {
       cudaSupport = false; # requires cudnn, not supported
