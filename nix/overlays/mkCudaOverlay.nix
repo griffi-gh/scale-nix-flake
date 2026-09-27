@@ -19,6 +19,7 @@ let
         cuda_cudart = scaleScope.scale-runtime;
         cuda_compat = scaleScope.scale-runtime;
         cuda_nvrtc = scaleScope.scale-runtime;
+        cuda_profiler_api = scaleScope.scale-runtime;
         libcufft = scaleScope.scale-runtime;
         libcublas = scaleScope.scale-runtime;
         libcurand = scaleScope.scale-runtime;
