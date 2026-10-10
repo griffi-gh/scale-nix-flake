@@ -194,7 +194,7 @@ update() {
   before="$(<"$manifest")"
   "update_$1" "${@:2}"
 
-  [[ "$(<"$manifest")" != "$before" ]] && $build || return 0
+  $build || return 0
 
   attr="scalePackages$([[ "$1" == latest ]] || echo "_$1")"
   pkgs="$(nix eval --raw "$root#$attr" 2>/dev/null --apply \
@@ -203,9 +203,11 @@ update() {
   log "building $attr ${dim}($pkgs)${reset}"
   if nix build --no-link $(printf "$root#$attr.%s " $pkgs); then
     ok "build succeeded"
-  else
+  elif [[ "$(<"$manifest")" != "$before" ]]; then
     printf '%s\n' "$before" >"$manifest"
     die "build failed, update reverted"
+  else
+    die "build failed"
   fi
 }
 
