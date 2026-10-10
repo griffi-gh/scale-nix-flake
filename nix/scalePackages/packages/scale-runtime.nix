@@ -40,16 +40,6 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/nix-support
     echo 'export NIX_LDFLAGS="''${NIX_LDFLAGS:-} -L${placeholder "out"}/lib -rpath ${placeholder "out"}/lib"' > $out/nix-support/setup-hook
 
-    # https://github.com/spectral-compute/scale-validation/issues/62
-    # HACK incoming:
-    rm $out/include/redscale_impl/builtins.h
-    sed -E \
-      -e 's@__host__ __DEVICE float rsqrt\(float\);@__DEVICE float rsqrt(float);@' \
-      -e 's@__host__ __DEVICE double rsqrt\(double\);@__DEVICE double rsqrt(double);@' \
-      -e 's@__host__ __DEVICE float rsqrtf\(float\);@__DEVICE float rsqrtf(float);@' \
-      -e 's@^([[:space:]]*(__host__)[[:space:]_A-Za-z]*\b(sinpi|cospi|tanpi|asinpi|acospi|atanpi|atan2pi)[fl]?[[:space:]]*\([^;]*\)[[:space:]]*;)@// \1@' \
-      ${scale-unwrapped}/include/redscale_impl/builtins.h > $out/include/redscale_impl/builtins.h
-
     runHook postInstall
   '';
 
