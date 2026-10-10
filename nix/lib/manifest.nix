@@ -1,21 +1,21 @@
 {
   latest = rec {
-    version = "1.7.3";
+    version = "1.7.4";
     source = let
-      platform = if builtins.compareVersions version "1.7.3" >= 0 then "Linux" else "amd64";
+      platform = "amd64";
     in rec {
       _type = "fetchurl";
       name = "scale-${version}-${platform}.tar.xz";
       url = "https://pkgs.scale-lang.com/tar/${name}";
-      hash = "sha256-hpr7FeapR8eWbN+UCGM+q2OQsh3a43VVOOujEnxocdo=";
+      hash = "sha512-L3IlP9ZLb5VeNF+g4nOqxwobIJiaJiwqSmw8ABJ1lImuZd/g/6MsqQVOjUvU+jKfhsNvUpsoUXEXiTmGGtMxYQ==";
     };
   };
 
   # NB: downloading nightly artifacts currently requires vpn access or sso account
   nightly =
     let
-      commitHash = "19908a3fa89c09ed5a7900aa1408e0cc8d37845f";
-      commitDate = "2026.09.27";
+      commitHash = "56034394355bba0d4aa932e3c387b35de90586f9";
+      commitDate = "2026.10.10";
     in
     {
       version = "0-unstable-${commitDate}";
@@ -23,7 +23,7 @@
         _type = "requireFile";
         name = "scale-unstable-${commitDate}-Linux.tar.xz";
         url = "https://dev-artifacts.spectralcompute.com/external/nightlies/${commitHash}/linux/${name}";
-        sha256 = "09xkli8417357r9i86q2686wqjiqm4yyz468z0nbpf4qhf3db729";
+        hash = "sha512-Y9BGtpIvALBtwYK1db385oFDRegSeE0s1QpfM59yYtOE4je/J/2IIA1Z3m7JaQMbGupw3bvA+rPjsWJ9h3x4mA==";
       };
     };
 }
