@@ -14,8 +14,8 @@
   # NB: downloading nightly artifacts currently requires vpn access or sso account
   nightly =
     let
-      commitHash = "f64a3ba4e2b781488bf7053ea6463c3d4ec35aec";
-      commitDate = "2026.11.03";
+      commitHash = "5f214ad8565c7d59aa54228df9ab9477dcbd8bd2";
+      commitDate = "2026.11.20";
     in
     {
       version = "0-unstable-${commitDate}";
@@ -23,7 +23,7 @@
         _type = "requireFile";
         name = "scale-unstable-${commitDate}-Linux.tar.xz";
         url = "https://dev-artifacts.spectralcompute.com/external/nightlies/${commitHash}/linux/${name}";
-        hash = "sha512-Q0PQHzA+QETSdBOVFkSTxIh4M3tBuc4/hrDPOuWs781aRvBi8Qt//AkdvN1LQPFA8CJAZ29JSJ1LJ6hlNr/3HA==";
+        hash = "sha512-eSAMso7HV01QhCjUdPIzThPlixfOdFop4rz8HH9GfjSK3BSIYLvquPaH3O9rolNgoG3fCRhLWtuprr27d2D1Ag==";
       };
     };
 }
